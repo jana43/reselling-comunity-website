@@ -11,25 +11,113 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <h3>Hello, world!</h3>
+    <!-- Image and text -->
+    <nav class="navbar sticky-top " , style="background-color: #0a1624;">
+     
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" style="color: azure;">My Site</a>
+        <button class="navbar-toggler " style="color: azure;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">about</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                category
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
 
-    {% if user.is_authenticated %}
-    <h2>{{user.username}}</h2>
-    {% else %}
-    <h2>No user logged in</h2>
-    {% endif %}
-    <a href="register">
-      <h2>register</h2>
-    </a>
-    <a href="login">
-      <h2>log in</h2>
-    </a>
-    <a href="logout_user">
-      <h2>log out</h2>
-    </a>
-    <a href="create">
-      <h2>create</h2>
-    </a>
+    <div class="container banner" >
+      <p class="banner-title">my site</p>
+    </div>
+
+    <div class="container">
+      {% if user.is_authenticated %}
+      <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="create">Create Post</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">{{user.username}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="logout_user">Log out</a>
+        </li>
+        
+        
+      </ul>
+      {% else %}
+      <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="create">Create Post</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="login">Log in</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="register">register</a>
+        </li>
+        
+        
+      </ul>
+      {% endif %}
+    </div>
+
+
+    <div class="container items">
+      <div class="row">
+      {% for item in data %}
+      
+        
+        <div class="col-sm-4 " >
+
+
+          <div class="card custom-card-body" >
+            {% for pic in pics%}
+              {% if item.title == pic.post.title %}
+             
+            <img class="card-img-top" src="{{pic.image.url}}" alt="Card image cap" style="height: 250px;">
+          
+            {% endif %}  
+              
+              {% endfor %}
+            <div class="card-body">
+              <p class="card-text">{{item.title}}...<a href="/viewpost/{{item.slug}}">view post</a></p>
+            </div>
+          </div>
+        </div>
+     
+        {% endfor %}
+      </div>
+    </div>
+    
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->

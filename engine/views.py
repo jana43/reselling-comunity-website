@@ -14,10 +14,38 @@ from PIL import Image
 import datetime
 
 def index(request):
-    return render(request , 'index.html')
-
+    _post__data = Post.objects.reverse()
+    _post__images = Images.objects.all()
+    _img_list = []
+    _dem_list = []
+    
 
     
+
+    for item in _post__images:
+        if item.post.title  not in _dem_list:
+            print(type(item.post.title) , item not in _img_list)
+            print(type(str(item)))
+       
+            print("appending...", item)
+            _dem_list.append(item.post.title)
+            _img_list.append(item)
+    print(_img_list)
+
+  
+    _parametre = {'data':_post__data , 'pics':_img_list}
+    
+    return render(request , 'index.html' ,_parametre)
+
+
+def show(request , slug_text):
+    data = Post.objects.filter(slug = slug_text)
+    if data.exists():
+        data = data.first()
+    else:
+        return HttpResponse("page not found")
+    
+    return render(request , 'show.html',{'data':data})  
 
 
 def register(request):

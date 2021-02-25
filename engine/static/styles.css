@@ -1,3 +1,40 @@
+body{
+ background-color: #0a1624;
+}
 h3{
     color: green;
+}
+
+a{
+    color: azure;
+}
+
+.banner{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+}
+
+.banner-title {
+    margin: 40;
+    font-size: 15vw;
+    color: rgba(224, 34, 9, 0.384);
+}
+
+.items{
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+    
+}
+
+.custom-card-body{
+    background-color: #0a1624;
+    margin-bottom: 30px;
+    border-color: azure;
+}
+
+p{
+    color: azure;
 }

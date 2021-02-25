@@ -8,4 +8,5 @@ urlpatterns = [
     path('login',views.login , name = "login"),
     path('logout_user',views.logout_user , name = "logout_user"),
     path('create',views.create , name = "create"),
+     path('viewpost/<slug:slug_text>/' , views.show , name = "show"),
 ] 
