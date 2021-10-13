@@ -8,36 +8,43 @@ from reselling.utilsA import unique_slug_generator_for_user
 import random
 import uuid
 
+
 class UserProfile(models.Model):
     username = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField()
     location = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, null=True , blank= True)
+    profile = models.ImageField(default="media/default/user.png")
+    slug = models.SlugField(max_length=200, null=True, blank=True)
+
     def __str__(self):
         return str(self.username)
-def slug_generator_for_user(sender , instance , *args , **kwargs):
+
+
+def slug_generator_for_user(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator_for_user(instance)
 
-    
-pre_save.connect( slug_generator_for_user ,sender = UserProfile )
- 
+
+pre_save.connect(slug_generator_for_user, sender=UserProfile)
+
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField(null=True , blank= True)
+    description = models.TextField(null=True, blank=True)
     price = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, null=True , blank= True)
+    slug = models.SlugField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.title
-    
-def slug_generator(sender , instance , *args , **kwargs):
+
+
+def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
-    
-pre_save.connect( slug_generator ,sender = Post )
+
+pre_save.connect(slug_generator, sender=Post)
+
 
 class Comment(models.Model):
     comment = models.CharField(max_length=100)
@@ -47,9 +54,10 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment
 
+
 class Images(models.Model):
-    image = models.FileField(upload_to='postimages',null=True,blank=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='postimages', default="media/default/noimage.png")
+    postImage = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.post)
+        return str(self.postImage)

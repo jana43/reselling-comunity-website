@@ -4,86 +4,84 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      #result{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-      }
-
-     
-    </style>
+    
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel = "stylesheet" href="/static/styles.css" />
+   
+    <link rel = "stylesheet" href="/static/create.css" />
     <title>Sell product registration</title>
     
   </head>
   <body>
-    <h3>Register to sell a product</h3>
+    <!-- <h3>Register to sell a product</h3>
     {% for message in messages %}
     <h4>
         {{message}}
     </h4>
     {% endfor %}
     <div class="container">
+      <div class="buttons">
+        <button>bold</button>
+        <button>italic</button>
+        <button>list item</button>
+        <button>color</button>
+        <a href="#">images</a>
+      </div>
         <form method="POST" action="create" enctype="multipart/form-data" >
             {% csrf_token %}
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Title</label>
+            <label for="exampleFormControlTextarea1" class="form-label">Enter the title of your post</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="title" , name = "title" >
-          </div>
-         
-          
-        
+
         <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Write about your product</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name = "description"></textarea>
+            <label for="exampleFormControlTextarea1" class="form-label">Write about your goods</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" name = "description"></textarea>
           </div>
           <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Tell about price</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="@price" , name = "price" >
           </div>
-          <div class="input-group mb-3">
-            <input type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control" id="inputGroupFile02" multiple name="images">
-            <label class="input-group-text" for="inputGroupFile02">Upload</label>
-          </div>
+          
           <button type="submit" class="btn btn-primary">Submit</button>  
         </form>
           
-    </div>
+    </div> -->
+
+
+    <div id="post-editor" contenteditable="true">
+      The quick brown fox jumped over the lazy dog.
+   </div>
+   <fieldset>
+     <button class="fontStyle" onclick="document.execCommand('italic',false,null);" title="Italicize Highlighted Text"><i>I</i>
+     </button>
+     <button class="fontStyle" onclick="document.execCommand( 'bold',false,null);" title="Bold Highlighted Text"><b>B</b>
+     </button>
+     <button class="fontStyle" onclick="document.execCommand( 'underline',false,null);"><u>U</u>
+     </button>
+     <button class="fontStyle" onclick="document.execCommand( 'foreColor', false, 'rgba(207, 238, 250)');">color
+     </button>
+     <button class="fontStyle" onclick="insertImage()">image
+    </button>
+    <button class="fontStyle" onclick="document.execCommand('delete');">delet selection
+    </button>
+   </fieldset>
+
+   <div class="images">
+     {% for image in images %}
+     <img src="{{image.image.url}}" style="width: 100px; height: 100px;" onclick="insertImage('{{image.image.url}}')">
+   </div>
     <div id="result"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-    
+    {% endfor %}
     <script>
-      window.onload = function() {
-  //Check File API support
-  if (window.File && window.FileList && window.FileReader) {
-    var filesInput = document.getElementById("inputGroupFile02");
-    filesInput.addEventListener("change", function(event) {
-      var files = event.target.files; //FileList object
-      var output = document.getElementById("result");
-      for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        //Only pics
-        if (!file.type.match('image'))
-          continue;
-        var picReader = new FileReader();
-        picReader.addEventListener("load", function(event) {
-          var picFile = event.target;
-          var div = document.createElement("div");
-          div.innerHTML = "<img class='thumbnail' style = 'height:90px ; width:128px;' src='" + picFile.result + "'" +
-            "title='" + picFile.name + "'/>";
-          output.insertBefore(div, null);
-        });
-        //Read the image
-        picReader.readAsDataURL(file);
+      function insertImage(img){
+        console.log(img)
+       
+        document.execCommand('insertHTML', false, '<br><br><br><br>');
+        document.execCommand('insertImage',false ,img+'?size=200' );
+        document.execCommand('insertHTML', false, '<br><br><br><br>');
+        
       }
-    });
-  } else {
-    console.log("Your browser does not support File API");
-  }
-}
-      </script>
+
+      
+    </script>
+    
   </body>
 </html>

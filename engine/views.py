@@ -12,30 +12,31 @@ from django.core.files.storage import FileSystemStorage
 from pathlib import Path
 from PIL import Image
 import datetime
+import time
 
 def index(request):
-    _post__data = Post.objects.reverse()
-    _post__images = Images.objects.all()
-    _img_list = []
-    _dem_list = []
+    # _post__data = Post.objects.reverse()
+    # _post__images = Images.objects.all()
+    # _img_list = []
+    # _dem_list = []
     
 
     
 
-    for item in _post__images:
-        if item.post.title  not in _dem_list:
-            print(type(item.post.title) , item not in _img_list)
-            print(type(str(item)))
+    # for item in _post__images:
+    #     if item.post.title  not in _dem_list:
+    #         print(type(item.post.title) , item not in _img_list)
+    #         print(type(str(item)))
        
-            print("appending...", item)
-            _dem_list.append(item.post.title)
-            _img_list.append(item)
-    print(_img_list)
+    #         print("appending...", item)
+    #         _dem_list.append(item.post.title)
+    #         _img_list.append(item)
+    # print(_img_list)
 
   
-    _parametre = {'data':_post__data , 'pics':_img_list}
+    # _parametre = {'data':_post__data , 'pics':_img_list}
     
-    return render(request , 'index.html' ,_parametre)
+    return render(request , 'index.html' )
 
 
 def show(request , slug_text):
@@ -83,6 +84,9 @@ def register(request):
     else:
         return render(request , 'register.html')
 
+def verify(request):
+    pass
+
 
 def login(request):
     if request.method == "POST":
@@ -109,6 +113,7 @@ def create(request):
         description = request.POST.get('description')
         price = request.POST.get('price')
         files = request.FILES.getlist('images' , False)
+        
          
         createPost = Post.objects.create(title = title , description = description , price =price)
         Post.save(createPost)
@@ -129,7 +134,32 @@ def create(request):
             
         return redirect('/')
     else:
-        return render(request  , 'create.html')
+        images = Images.objects.filter(postImage = request.user)
+        return render(request  , 'create.html',{'images':images})
 
 
+@login_required(login_url='login')
+def uploadImages(request):
+    if request.method == "POST":
+        files = request.FILES.getlist('images' , False)
+        title = time.time()
+        title = str(title)
+        print(title)
+
+        for f in files:
+            chars= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+            randomstr= ''.join((random.choice(chars)) for x in range(10))
+            fileName = str(f).replace(" ",'')
+            fileName = fileName+title.replace(" ",'')[:6]+randomstr+'.png'
+            img = Image.open(f)
+            
+            img.save(f'media/postimages/{fileName}','png', optimize = True , quality = 10)
+            
+            f = f"/postimages/{fileName}"
+            
+            Images.objects.create(postImage = request.user , image=f)
+            
+        return redirect('/')
+    else:
+        return render(request  , 'uploadImage.html')
 
